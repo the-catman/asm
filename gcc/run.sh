@@ -1,0 +1,1 @@
+gcc main.c main.S -o main -z noexecstack -O3 && ./main
