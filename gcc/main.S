@@ -38,6 +38,7 @@ add:
     xor %eax, %eax // Set eax (and consequently %al) to 0 (we have 0 vector registers).
     // Why this is done is explained slightly here: https://stackoverflow.com/questions/6212665/why-is-eax-zeroed-before-a-call-to-printf
     // As well as here: https://cs.brown.edu/courses/csci1310/2020/notes/l08.html
+    // Apparently, Vector Registers are used when mixing floating point numbers with printf (XMM0 -> XMM31)
     call printf // Call printf
 
     pop %rax // Pop our previous rdi to rax, which is the register used for returning stuff.

@@ -8,6 +8,8 @@ Just some collection of assembly stuff.
 
 ./conversion is just gcc converting C to x86-64 assembly with optimizations.
 
+./fibonacci is the fibonacci sequence in both C and x86-64 assembly.
+
 # Inefficiency disclaimer!
 
 This code is quite inefficient, since it was designed to be a mini-tour for newbies.
