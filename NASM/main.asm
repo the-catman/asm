@@ -1,7 +1,7 @@
-; The first register is the destination, unlike in AT&T syntax.
+; The first parameter to instructions is the destination, unlike in AT&T syntax.
 ; So for example, mov rax, rbx means rax = rbx.
 
-; I'm using 64 bit registers because I'm lazy. Sue me.
+; I'm using 64 bit registers because I said so. Sue me.
 
 global add
 add:

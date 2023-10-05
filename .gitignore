@@ -1,1 +1,5 @@
 .vscode/
+
+gcc/main
+NASM/main.o
+NASM/main

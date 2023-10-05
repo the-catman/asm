@@ -1,43 +1,45 @@
-// The second destination is the destination, unlike in Intel syntax.
+// The second parameter to instructions is the destination, unlike in Intel syntax.
 // So for example: movq %rbx, %rax means rax = rbx.
 
-// I'm using 64 bit registers because I'm lazy. Sue me.
+// I'm using 64 bit registers because I said so. Sue me.
 
 .data
-format: .asciz "From x86-64 assembly: %d\n"
+mystr: .asciz "From x86-64 assembly: %li\n"
 
 .extern printf
 
 .text
 .globl add
 add:
-    addq %rsi, %rdi // rdi (which is a) += rsi (which is b)
-    addq %rdx, %rdi // rdi (which is a) += rdx (which is c)
-    addq %rcx, %rdi // rdi (which is a) += rcx (which is d)
-    addq %r8, %rdi // rdi (which is a) += r8 (which is e)
-    addq %r9, %rdi // rdi (which is a) += r9 (which is f)
+    add %rsi, %rdi // rdi (which is a) += rsi (which is b)
+    add %rdx, %rdi // rdi (which is a) += rdx (which is c)
+    add %rcx, %rdi // rdi (which is a) += rcx (which is d)
+    add %r8, %rdi // rdi (which is a) += r8 (which is e)
+    add %r9, %rdi // rdi (which is a) += r9 (which is f)
+    add 8(%rsp), %rdi // rdi (which is a) += rsp + 8 (which is g)
+    add 16(%rsp), %rdi // rdi (which is a) += rsp + 16 (which is h)
+    add 24(%rsp), %rdi // rdi (which is a) += rsp + 24 (which is i)
 
-    addq $8, %rsp // Add 8 to stack pointer. This is because when we have more than 6 parameters, we push the rest of the parameteres onto the stack.
+    // Basically, %rdi, %rsi, %rdx, %rcx, %r8 and %r9 are the first, second, third, fourth, fifth and sixth parameters to a function respectively.
+    // The rest of the parameters are pushed onto the stack, which we can access using %rsp.
+    // (And this ironically means that having 6 or less parameters is nanoseconds more efficient than having 7+ parameters)
+    // In this case, we have 9 parameters, 6 go into registers, and the 3 go onto the stack.
+    // Think of the stack as a giant array, and rsp is the index of that array.
+    // We go up eight by eight on rsp, simply because this is code is for 64 bits. 64 / 8 = 8 bytes.
+    // If we had 32 bits, we would go up four by four. 32 / 8 = 4 bytes. But we don't ;)
 
-    popq %rdx // Pop g from stack and save it to rdx
-    addq %rdx, %rdi // rdi (which is a) += rdx (which is g)
-
-    popq %rdx // Pop h from stack and save it to rdx
-    addq %rdx, %rdi // rdi (which is a) += rdx (which is h)
-
-    popq %rdx // Pop i from stack and save it to rdx
-    addq %rdx, %rdi // rdi (which is a) += rdx (which is i)
-
-    movq %rdi, %rsi // rdi = rsi. Move string to rsi, the register for passing the second parameter to a function
+    mov %rdi, %rsi // rdi = rsi. Move rdi to rsi, which is the register for passing the second parameter to a function.
+    // I know we could've added the numbers to rsi directly instead of adding it to rdi then moving it to rsi,
+    // but I did it like so for readability and for newbies to understand.
     
-    pushq %rdi // Push rdi to the stack, because calling printf will change a bunch of registers.
+    push %rdi // Push rdi to the stack, because calling printf will change a bunch of registers.
 
-    lea format(%rip), %rdi // Move string to rdi, the register for passing the first parameter to a function
-    xor %eax, %eax // Set eax to 0, this is basically the amount of parameters we have on the stack (so, none)
+    lea mystr(%rip), %rdi // Move string to rdi, which is the register for passing the first parameter to a function. I have no idea what %rip is.
+    xor %eax, %eax // Set eax (and consequently %al) to 0 (we have 0 vector registers).
+    // Why this is done is explained slightly here: https://stackoverflow.com/questions/6212665/why-is-eax-zeroed-before-a-call-to-printf
+    // As well as here: https://cs.brown.edu/courses/csci1310/2020/notes/l08.html
     call printf // Call printf
 
-    popq %rax // Pop our previous rdi to rax, which is the register used for returning stuff.
-    subq $32, %rsp // Return our stack pointer back to where it was. We popped 4 times, therefore we need to go back 4 * 8 = 32 in rsp. (Since we're in 64 bit mode,
-    // each stuff is 8 bytes).
+    pop %rax // Pop our previous rdi to rax, which is the register used for returning stuff.
 
-    retq // Return
+    ret // Return rax

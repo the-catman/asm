@@ -10,4 +10,6 @@ Just some collection of assembly stuff.
 
 # Inefficiency disclaimer!
 
-This code is quite inefficient. Do not copy my code if you want to be efficient (which is probably the reason why you're studying assembly anyway.)
+This code is quite inefficient, since it was designed to be a mini-tour for newbies.
+
+Do not copy my coding style if you want to be efficient (which is probably the reason why you're studying assembly anyway).

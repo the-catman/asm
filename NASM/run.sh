@@ -5,4 +5,5 @@ echo Compiling... \
     && gcc -m64 main.o main.c -o main -z noexecstack \
     && ./main
 
-# -z noexecstack shuts up the compiler warnings :D 
+# -z noexecstack shuts up the compiler warnings :D
+#change elf64 to elf32 and -m64 to -m32 if you want to run on x86
